@@ -2,3 +2,8 @@
 # About the project
 
 *Write a short description about the course and add a link to your GitHub repository here. This is an R Markdown (.Rmd) file so you can use R Markdown syntax.*
+I hope to learn how to use statistics in my research. I hope that during the course we will get clear explanations, as I am a very beginner. 
+I found the course on weboodi. 
+My GitHub repository - link: https://github.com/Beata5stat/IODS-project
+
+2nd try!
