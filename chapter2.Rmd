@@ -1,7 +1,64 @@
-# Insert chapter 2 title here
 
-*Describe the work you have done this week and summarize your learning.*
+# Regression analysis
+
+*This week my learning was focused on regression analysis. As I am a beginer to statistics, I started with learning theory of the regression analysis, its use and limits, which I found very interesting. Next, I started doing exercices from DataCamp and working on the assignments. Kimmo's help during workshops was crucial for  my progress.*
 
 - Describe your work and results clearly. 
 - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods.
 - Assume the reader has no previous knowledge of your data or the more advanced methods you are using.
+
+
+```{r}
+learning2014 <- read.csv("data/learning2014.csv")
+
+str(learning2014)
+
+#plot1:
+#learning2014
+library(ggplot2)
+p1 <- ggplot(learning2014, aes(x = attitude, y = Points, col = gender))
+p2 <- p1 + geom_point()
+p2
+p3 <- p2 + geom_smooth(method = "lm")
+p4 <- p3 + ggtitle("Student's attitude versus exam points")
+p4
+
+```
+
+
+- The data was gathered for a research exploring approaches to learning. The responders' gender, age, and attitude, etc., were taken into account. 
+- Total of 166 observations of 7 variables. (For some reason at certain point it started showing 8 instead of 7 variables. I worked on that with Kimmo, he said to ignore it). :)
+
+- First, I installed the ggplot2 (packages/install) and initialized plot. Exam points, attitude and gender were taken into account in the analysis. 
+
+-The plots are located under the name "plot", in the "data" folder in my GitHub repository. 
+Edit: for some reason they don't show there, only codes are visible. The codes are working, and create beautiful models :) 
+
+```{r r.fig.show ='hide'} 
+
+#learning2014
+library(ggplot2)
+qplot(attitude, Points, data = learning2014) + geom_smooth(method = "lm")
+my_model <- lm(Points ~ attitude, data = learning2014)
+summary(my_model)
+
+
+```
+
+Interpretation: it became visible that female participants were able to score higher than male participants when their attitude had lower value. In case of the male participants there is quite clear correlation between attitude and obtained points - statistically the higher the attitude, the higer the points. As for the female participants, the relationship between these vaiables is weaker. More participants scored better than predicted. Predictably there were cases of low points when the attitude was low, as well as there were high scores when the attitude was high. The statistical test is expressed by the slope of the line. In the performed analysis, it is different than 0, proving the usabilty of the model. 
+
+R-squared of the model answers the question how well the model represents the data. Put simply, it is defined by the difference between observed value (data; dots on the plot) and fitted value (predicting line; errors; residue). As Tuomo Nieminen explains, "the model  is found by minimising the sum of squared residuals". 
+
+```{r}
+head(learning2014) # just to see the 6 first lines
+my_model2 <- lm(Points ~ attitude + stra, data = learning2014)
+par(mfrow = c(2,2))
+plot(my_model2, which = c(1, 2, 5))
+
+```
+
+Residual vs. Fitted values verifies the assumptions of the model. 
+
+the Normal Q-Q -here it confirms that the errors are normally distributed. 
+
+Residuals vs. Leverage shows which observations have impact on the model that could be defined as "unusually high".

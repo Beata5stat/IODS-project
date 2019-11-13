@@ -1,5 +1,6 @@
 ---
 title: "IODS course project"
+name: Beata Anton
 output:
   html_document:
     theme: cosmo
