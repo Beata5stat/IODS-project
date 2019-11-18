@@ -1,0 +1,183 @@
+
+# Chapter 3 
+*Logistic regression*
+  
+My GitHub repository - link: https://github.com/Beata5stat/IODS-project
+
+```{r}
+url <- "http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets"
+url_math <- paste(url, "student-mat.csv", sep = "/")
+url_math
+math <- read.table(url_math, sep = ";" , header=TRUE)
+url_por <- paste(url, "student-por.csv", sep ="/")
+url_por
+por <- read.table(url_por, sep = ";", header = TRUE)
+colnames(math)
+colnames(por)
+```
+
+#Description: The data refers to the achievements of students of two Portugese schools (secondary education). The data includes information concerning students' grades, their background, alcohol consumption level etc. 
+
+#Hypothesis: 
+#1. The inhabitants of rural areas consume more alcohol that those living in urban zones.
+#2. Age-gender relationship. The alcohol consumption is higher amongst men than women. Men start drinking earlier that women.
+#3. The extra-curricular activities can be correlated with the lower level of alcohol consumption. 
+#4. Going out can be associated with higher level of drinking.
+
+```{r}
+
+library(tidyr); library(dplyr); library(ggplot2)
+glimpse(alc) 
+gather(alc) %>% glimpse
+gather(alc) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
+```
+
+
+```{r}
+# math and por are available
+
+# access the dplyr library
+library(dplyr)
+
+# common columns to use as identifiers
+join_by <- c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet")
+
+# join the two datasets by the selected identifiers
+math_por <- inner_join(math, por, by = join_by, suffix = c(".math", ".por"))
+
+# see the new column names
+colnames(math_por)
+
+# glimpse at the data
+glimpse(math_por)
+
+# dplyr, math_por, join_by are available
+
+# print out the column names of 'math_por'
+colnames(math_por)
+
+# create a new data frame with only the joined columns
+alc <- select(math_por, one_of(join_by))
+
+# columns that were not used for joining the data
+notjoined_columns <- colnames(math)[!colnames(math) %in% join_by]
+
+# print out the columns not used for joining
+notjoined_columns
+
+# for every column name not used for joining...
+for(column_name in notjoined_columns) {
+  # select two columns from 'math_por' with the same original name
+  two_columns <- select(math_por, starts_with(column_name))
+  # select the first column vector of those two columns
+  first_column <- select(two_columns, 1)[[1]]
+  
+  # if that first column  vector is numeric...
+  if(is.numeric(first_column)) {
+    # take a rounded average of each row of the two columns and
+    # add the resulting vector to the alc data frame
+    alc[column_name] <- round(rowMeans(two_columns))
+  } else { # else if it's not numeric...
+    # add the first column vector to the alc data frame
+    alc[column_name] <- first_column
+  }
+}
+
+# glimpse at the new combined data
+glimpse(alc)
+
+# alc is available
+
+# access the 'tidyverse' packages dplyr and ggplot2
+library(dplyr); library(ggplot2)
+
+# define a new column alc_use by combining weekday and weekend alcohol use
+alc <- mutate(alc, alc_use = (Dalc + Walc) / 2)
+
+# initialize a plot of alcohol use
+g1 <- ggplot(data = alc, aes(x = alc_use, fill = address))
+
+# define the plot as a bar plot and draw it
+g1 + geom_bar()
+
+# define a new logical column 'high_use'
+alc <- mutate(alc, high_use = alc_use > 2)
+
+# initialize a plot of 'high_use'
+g2 <- ggplot(alc, aes(high_use))
+
+# draw a bar plot of high_use by
+g2 + facet_wrap("address") + geom_bar()
+```
+
+# Ad.1.  "The inhabitants of rural areas consume more alcohol that those living in urban zones". Interpretation: The hypothesis proposed higher alcohol consumptions level among inhabitants of rural areas when compared with the inhabitants of urban areas. However, the data suggests that the higher levels of alcohol consumption are more often to be found among the inhabitants of urban areas.
+
+
+```{r}
+
+library(ggplot2)
+
+# initialize a plot of high_use and G3
+g1 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
+
+# define the plot as a boxplot and draw it
+g1 + geom_boxplot() + ylab("age")
+
+# initialise a plot of high_use and absences
+g2 <- ggplot(alc, aes(x = high_use, y = age, col = sex))
+
+# define the plot as a boxplot and draw it
+g2 + geom_boxplot() + ggtitle("Student age & alcohol consumption")
+
+```
+
+#Ad.2. The hipotesis proposed that men start drinking earlier that women and that alcohol consumption level is higher in case of male students vs. female. The hypotesis seem to be confirmed. The male students start drinking earlier (around the age of 15), while women later (around the age of 16). Furthermore, the level of alcohol consumption is lower in case of women. 
+
+```{r}
+# alc is available
+
+# access the 'tidyverse' packages dplyr and ggplot2
+library(dplyr); library(ggplot2)
+
+# define a new column alc_use by combining weekday and weekend alcohol use
+alc <- mutate(alc, alc_use = (Dalc + Walc) / 2)
+
+# initialize a plot of alcohol use
+g1 <- ggplot(data = alc, aes(x = alc_use, fill = activities))
+
+# define the plot as a bar plot and draw it
+g1 + geom_bar()
+
+# define a new logical column 'high_use'
+alc <- mutate(alc, high_use = alc_use > 2)
+
+# initialize a plot of 'high_use'
+g2 <- ggplot(alc, aes(high_use))
+
+# draw a bar plot of high_use by sex
+g2 + facet_wrap("activities") + geom_bar()
+```
+
+
+#Ad.3. The hypothesis was that the participation in extra-curricular activities can be positively correlated with the lower alcohol consumption. However, the collected data shows that the high use of alcohol is present at very similar levels in both groups. In case of low levels of alcohol consumpion (level 1), more than half of students participated in extra activities. In case of high level of alcohol consumption (level 5), around half of the students was also participating in extra activities. However, even though the ratios are more or less the same, the reasons for drinking may be dramatically different (for example heavy drinking caused by high levels of stres in case of students participating in extra-curr. activities). 
+
+```{r}
+library(ggplot2)
+
+# initialize a plot of high_use and G3
+g1 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
+
+# define the plot as a boxplot and draw it
+g1 + geom_boxplot() + ylab("goout")
+
+# initialise a plot of high_use and absences
+g2 <- ggplot(alc, aes(x = high_use, y = goout, col = sex))
+
+# define the plot as a boxplot and draw it
+g2 + geom_boxplot() + ggtitle("Going out & alcohol consumption")
+
+```
+
+Ad.4. Going out can be positively associated with higher use of alcohol consumption. Especially in case of male students, there is a visible growth in consumption levels when "going out" reaches higher values. 
+
+

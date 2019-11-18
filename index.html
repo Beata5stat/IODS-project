@@ -387,6 +387,30 @@ summary {
 <ul>
 <li><a href="#about-the-project">About the project</a></li>
 <li><a href="#regression-analysis">Regression analysis</a></li>
+<li><a href="#chapter-3">Chapter 3</a></li>
+<li><a href="#reading-the-questionaires-data-into-memory-and-printing-out-the-address">Reading the questionaires data into memory and printing out the address:</a></li>
+<li><a href="#printing-out-the-names-of-the-variables">Printing out the names of the variables:</a></li>
+<li><a href="#math-and-por-are-available">math and por are available</a></li>
+<li><a href="#access-the-dplyr-library">access the dplyr library</a></li>
+<li><a href="#common-columns-to-use-as-identifiers">common columns to use as identifiers</a></li>
+<li><a href="#join-the-two-datasets-by-the-selected-identifiers">join the two datasets by the selected identifiers</a></li>
+<li><a href="#see-the-new-column-names">see the new column names</a></li>
+<li><a href="#glimpse-at-the-data">glimpse at the data</a></li>
+<li><a href="#dplyr-math_por-join_by-are-available">dplyr, math_por, join_by are available</a></li>
+<li><a href="#print-out-the-column-names-of-math_por">print out the column names of ‘math_por’</a></li>
+<li><a href="#create-a-new-data-frame-with-only-the-joined-columns">create a new data frame with only the joined columns</a></li>
+<li><a href="#columns-that-were-not-used-for-joining-the-data">columns that were not used for joining the data</a></li>
+<li><a href="#print-out-the-columns-not-used-for-joining">print out the columns not used for joining</a></li>
+<li><a href="#for-every-column-name-not-used-for-joining">for every column name not used for joining…</a></li>
+<li><a href="#glimpse-at-the-new-combined-data">glimpse at the new combined data</a></li>
+<li><a href="#alc-is-available">alc is available</a></li>
+<li><a href="#access-the-tidyverse-packages-dplyr-and-ggplot2">access the ‘tidyverse’ packages dplyr and ggplot2</a></li>
+<li><a href="#define-a-new-column-alc_use-by-combining-weekday-and-weekend-alcohol-use">define a new column alc_use by combining weekday and weekend alcohol use</a></li>
+<li><a href="#initialize-a-plot-of-alcohol-use">initialize a plot of alcohol use</a></li>
+<li><a href="#define-the-plot-as-a-bar-plot-and-draw-it">define the plot as a bar plot and draw it</a></li>
+<li><a href="#define-a-new-logical-column-high_use">define a new logical column ‘high_use’</a></li>
+<li><a href="#initialize-a-plot-of-high_use">initialize a plot of ‘high_use’</a></li>
+<li><a href="#draw-a-bar-plot-of-high_use-by-sex">draw a bar plot of high_use by sex</a></li>
 </ul>
 </div>
 
@@ -475,6 +499,106 @@ plot(my_model2, which = c(1, 2, 5))</code></pre>
 <p>Residual vs. Fitted values verifies the assumptions of the model.</p>
 <p>the Normal Q-Q -here it confirms that the errors are normally distributed.</p>
 <p>Residuals vs. Leverage shows which observations have impact on the model that could be defined as “unusually high”.</p>
+<hr />
+</div>
+<div id="chapter-3" class="section level1">
+<h1>Chapter 3</h1>
+<p><em>Logistic regression</em></p>
+<p>My GitHub repository - link: <a href="https://github.com/Beata5stat/IODS-project" class="uri">https://github.com/Beata5stat/IODS-project</a></p>
+<p>#Reading the data: url &lt;- “<a href="http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets" class="uri">http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets</a>”</p>
+<p>url_math &lt;- paste(url, “student-mat.csv”, sep = “/”) url_math</p>
+</div>
+<div id="reading-the-questionaires-data-into-memory-and-printing-out-the-address" class="section level1">
+<h1>Reading the questionaires data into memory and printing out the address:</h1>
+<p>math &lt;- read.table(url_math, sep = “;” , header=TRUE) url_por &lt;- paste(url, “student-por.csv”, sep =“/”) url_por por &lt;- read.table(url_por, sep = “;”, header = TRUE)</p>
+</div>
+<div id="printing-out-the-names-of-the-variables" class="section level1">
+<h1>Printing out the names of the variables:</h1>
+<p>colnames(math) colnames(por)</p>
+<p>#Description: The data refers to the achievements of students of two Portugese schools (secondary education). The data includes information concerning students’ grades, their background, alcohol consumption level etc.</p>
+<p>#Hypothesis: #1. The better quality of familial relationship, the lower the level of alcohol consumption. #2. The inhabitants of rural areas consume more alcohol that those living in urban zones. #3. The higher level of extra-curricular activities is related to lower level of alcohol consumption. #4. The number of past class failures is positiviely related to higher levels of alcohol consumption.</p>
+</div>
+<div id="math-and-por-are-available" class="section level1">
+<h1>math and por are available</h1>
+</div>
+<div id="access-the-dplyr-library" class="section level1">
+<h1>access the dplyr library</h1>
+<p>library(dplyr)</p>
+</div>
+<div id="common-columns-to-use-as-identifiers" class="section level1">
+<h1>common columns to use as identifiers</h1>
+<p>join_by &lt;- c(“school”,“sex”,“age”,“address”,“famsize”,“Pstatus”,“Medu”,“Fedu”,“Mjob”,“Fjob”,“reason”,“nursery”,“internet”)</p>
+</div>
+<div id="join-the-two-datasets-by-the-selected-identifiers" class="section level1">
+<h1>join the two datasets by the selected identifiers</h1>
+<p>math_por &lt;- inner_join(math, por, by = join_by, suffix = c(“.math”, “.por”))</p>
+</div>
+<div id="see-the-new-column-names" class="section level1">
+<h1>see the new column names</h1>
+<p>colnames(math_por)</p>
+</div>
+<div id="glimpse-at-the-data" class="section level1">
+<h1>glimpse at the data</h1>
+<p>glimpse(math_por)</p>
+</div>
+<div id="dplyr-math_por-join_by-are-available" class="section level1">
+<h1>dplyr, math_por, join_by are available</h1>
+</div>
+<div id="print-out-the-column-names-of-math_por" class="section level1">
+<h1>print out the column names of ‘math_por’</h1>
+<p>colnames(math_por)</p>
+</div>
+<div id="create-a-new-data-frame-with-only-the-joined-columns" class="section level1">
+<h1>create a new data frame with only the joined columns</h1>
+<p>alc &lt;- select(math_por, one_of(join_by))</p>
+</div>
+<div id="columns-that-were-not-used-for-joining-the-data" class="section level1">
+<h1>columns that were not used for joining the data</h1>
+<p>notjoined_columns &lt;- colnames(math)[!colnames(math) %in% join_by]</p>
+</div>
+<div id="print-out-the-columns-not-used-for-joining" class="section level1">
+<h1>print out the columns not used for joining</h1>
+<p>notjoined_columns</p>
+</div>
+<div id="for-every-column-name-not-used-for-joining" class="section level1">
+<h1>for every column name not used for joining…</h1>
+<p>for(column_name in notjoined_columns) { # select two columns from ‘math_por’ with the same original name two_columns &lt;- select(math_por, starts_with(column_name)) # select the first column vector of those two columns first_column &lt;- select(two_columns, 1)[[1]]</p>
+<p># if that first column vector is numeric… if(is.numeric(first_column)) { # take a rounded average of each row of the two columns and # add the resulting vector to the alc data frame alc[column_name] &lt;- round(rowMeans(two_columns)) } else { # else if it’s not numeric… # add the first column vector to the alc data frame alc[column_name] &lt;- first_column } }</p>
+</div>
+<div id="glimpse-at-the-new-combined-data" class="section level1">
+<h1>glimpse at the new combined data</h1>
+<p>glimpse(alc)</p>
+</div>
+<div id="alc-is-available" class="section level1">
+<h1>alc is available</h1>
+</div>
+<div id="access-the-tidyverse-packages-dplyr-and-ggplot2" class="section level1">
+<h1>access the ‘tidyverse’ packages dplyr and ggplot2</h1>
+<p>library(dplyr); library(ggplot2)</p>
+</div>
+<div id="define-a-new-column-alc_use-by-combining-weekday-and-weekend-alcohol-use" class="section level1">
+<h1>define a new column alc_use by combining weekday and weekend alcohol use</h1>
+<p>alc &lt;- mutate(alc, alc_use = (Dalc + Walc) / 2)</p>
+</div>
+<div id="initialize-a-plot-of-alcohol-use" class="section level1">
+<h1>initialize a plot of alcohol use</h1>
+<p>g1 &lt;- ggplot(data = alc, aes(x = alc_use, fill = address))</p>
+</div>
+<div id="define-the-plot-as-a-bar-plot-and-draw-it" class="section level1">
+<h1>define the plot as a bar plot and draw it</h1>
+<p>g1 + geom_bar()</p>
+</div>
+<div id="define-a-new-logical-column-high_use" class="section level1">
+<h1>define a new logical column ‘high_use’</h1>
+<p>alc &lt;- mutate(alc, high_use = alc_use &gt; 2)</p>
+</div>
+<div id="initialize-a-plot-of-high_use" class="section level1">
+<h1>initialize a plot of ‘high_use’</h1>
+<p>g2 &lt;- ggplot(alc, aes(high_use))</p>
+</div>
+<div id="draw-a-bar-plot-of-high_use-by-sex" class="section level1">
+<h1>draw a bar plot of high_use by sex</h1>
+<p>g2 + facet_wrap(“address”) + geom_bar()</p>
 <hr />
 </div>
 
