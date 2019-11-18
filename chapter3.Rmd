@@ -1,8 +1,6 @@
 
 # Chapter 3 
 *Logistic regression*
-  
-My GitHub repository - link: https://github.com/Beata5stat/IODS-project
 
 ```{r}
 url <- "http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets"
@@ -23,15 +21,6 @@ colnames(por)
 #2. Age-gender relationship. The alcohol consumption is higher amongst men than women. Men start drinking earlier that women.
 #3. The extra-curricular activities can be correlated with the lower level of alcohol consumption. 
 #4. Going out can be associated with higher level of drinking.
-
-```{r}
-
-library(tidyr); library(dplyr); library(ggplot2)
-glimpse(alc) 
-gather(alc) %>% glimpse
-gather(alc) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
-```
-
 
 ```{r}
 # math and por are available
