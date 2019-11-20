@@ -1,0 +1,109 @@
+# Beata, 20.11.2019
+
+```{r}
+library(MASS)
+data("Boston")
+str(Boston)
+summary(Boston)
+pairs(Boston)
+```
+
+Description: The collected data is related to the housing values in suburbs of Boston, MA, US. The data frame has 506 rows and 14 columns. Such factors like crime rate, proportion of non-retail business, avarage number of rooms, and so on, are taken into account. 
+
+
+```{r}
+# MASS, corrplot, tidyr and Boston dataset are available
+library(MASS)
+data("Boston")
+library(corrplot)
+library(tidyr)
+cor_matrix<-cor(Boston)  %>% round(digits=2)
+cor_matrix
+corrplot(cor_matrix, method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex = 0.6)
+
+```
+
+```{r}
+# MASS, Boston and boston_scaled are available
+library(MASS)
+data(Boston)
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+summary(boston_scaled$crim)
+bins <- quantile(boston_scaled$crim)
+bins
+crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE, labels = c("low", "med_low", "med_high", "high"))
+table(crime)
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+boston_scaled <- data.frame(boston_scaled, crime)
+
+```
+
+```{r}
+n <- nrow(boston_scaled)
+ind <- sample(n,  size = n * 0.8)
+train <- boston_scaled[ind,]
+test <- boston_scaled[-ind,]
+correct_classes <- test$crime
+test <- dplyr::select(test, -crime)
+
+```
+
+```{r}
+library(MASS)
+#train <- boston_scaled[ind,]
+#data(train)
+lda.fit <- lda(crime ~ ., data = train)
+lda.fit
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "orange", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+classes <- as.numeric(train$crime)
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 1)
+
+```
+
+```{r}
+lda.pred <- predict(lda.fit, newdata = test)
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+```{r}
+library(MASS)
+data(Boston)
+scale(Boston)
+dist_eu <- dist(Boston)
+summary(dist_eu)
+dist_man <- dist(Boston, method = 'manhattan')
+summary(dist_man)
+
+```
+
+
+BONUS: Bonus: Perform k-means on the original Boston data with some reasonable number of clusters (> 2).
+```{r}
+data(Boston)
+scale(Boston)
+km <-kmeans(Boston, centers = 4)
+pairs(Boston, col = km$cluster)
+```
+
+```{r}
+data(Boston)
+set.seed(123)
+k_max <- 10
+twcss <- sapply(1:k_max, function(k){kmeans(Boston, k)$tot.withinss})
+library(ggplot2)
+qplot(x = 1:k_max, y = twcss, geom = 'line')
+km <-kmeans(Boston, centers = 2)
+pairs(Boston, col = km$cluster)
+
+```
+
