@@ -12,7 +12,6 @@ Description: The collected data is related to the housing values in suburbs of B
 
 
 ```{r}
-# MASS, corrplot, tidyr and Boston dataset are available
 library(MASS)
 data("Boston")
 library(corrplot)
@@ -24,7 +23,6 @@ corrplot(cor_matrix, method="circle", type="upper", cl.pos="b", tl.pos="d", tl.c
 ```
 
 ```{r}
-# MASS, Boston and boston_scaled are available
 library(MASS)
 data(Boston)
 boston_scaled <- scale(Boston)
@@ -87,7 +85,7 @@ summary(dist_man)
 ```
 
 
-BONUS: Bonus: Perform k-means on the original Boston data with some reasonable number of clusters (> 2).
+BONUS: Bonus: Perform k-means on the original Boston data with some reasonable number of clusters (> 2). Number of clusters: 4. 
 ```{r}
 data(Boston)
 scale(Boston)
