@@ -1,4 +1,4 @@
-# Beata, 20.11.2019
+# Chapter 4, Clustering & Classification
 
 ```{r}
 library(MASS)
