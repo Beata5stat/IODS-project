@@ -16,7 +16,6 @@ The data was collected by the UN to measure Human Development Index (HDI) around
 
 
 ```{r}
-summary(human)
-pca_human <- prcomp(human)
+
 ```
 
