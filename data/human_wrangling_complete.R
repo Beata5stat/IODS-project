@@ -71,7 +71,8 @@ str(human2)
 dim(human2)
 head(human2)
 
-#Description: the data was collected by the UN to measure Human Development Index (HDI) around the world. The variables refer to, among others, life expectancy, education, gender inequality, etc.
+#Description: the data was collected by the UN to measure Human Development Index (HDI) around the world. 
+#The variables refer to, among others, life expectancy, education, gender inequality, etc.
 
 #Mutate the data: transform the Gross National Income (GNI) variable to numeric
 
@@ -79,14 +80,14 @@ library(stringr)
 str(human2$GNI)
 str_replace(human2$GNI, pattern=",", replace ="") %>% as.numeric
 
-#Exclude unneeded variables & Remove all rows with missing values (1 point).
+#Exclude unneeded variables & Remove all rows with missing values
 keep <- c("Country", "edu2F_edu2M_ratio", "laboF_laboM_ratio", "Life.exp", "Edu.exp", "GNI", "Mat.Mor", "Ado.Birth", "Parli.F")
 human2 <- select(human2, one_of(keep))
 complete.cases(human2)
 data.frame(human2[-1], comp = complete.cases(human2))
 human2_ <- filter(human2, complete.cases(human2))
 
-#Remove the observations which relate to regions instead of countries. (1 point)
+#Remove the observations which relate to regions instead of countries.
 
 tail(human2_, 10)
 last <- nrow(human2_) - 7
@@ -102,7 +103,7 @@ human2_ <- select(human2_, -Country)
 dim(human2_)
 #[1] 155   8 - correct!
 
-#Save the human data in your data folder (1 point).
+#Save the human data in your data folder
 human <- human2_
 
 
