@@ -103,6 +103,6 @@ dim(human2_)
 #[1] 155   8 - correct!
 
 #Save the human data in your data folder (1 point).
-
 human <- human2_
+
 
