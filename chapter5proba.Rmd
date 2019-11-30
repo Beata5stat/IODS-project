@@ -1,0 +1,18 @@
+# Dimensionality Reduction Techniques
+
+# 1.Show a graphical overview of the data and show summaries of the variables in the data. Describe and interpret the outputs, commenting on the distributions of the variables and the relationships between them. (0-3 points)
+
+```{r}
+getwd()
+setwd("C://Users/Omistaja/Documents/IODS-project/data/")
+human <- read.csv ("human.csv")
+names(human)
+str(human)
+head(human)
+summary(human)
+```
+
+#The data was collected by the UN to measure Human Development Index (HDI) around the world. The variables refer to life and education expectancy, gross national income, maternal mortality, adolescent birth, female representation in parliament, etc. Education and labor female to male ratio show quite similar values, indicating relationship between years of received education and work. Life expectancy shows values that could be interpreted as quite optimistic, with average of 71.65 y. and 1st Qu. at 66.30. Education at min. 5.40 and max. 20.20 shows a quite significant span, with mean at 13.18 and 1st Qu. at 11.25. Taking Norway and Afghanistan as an example, it can be seen that education and labor female-male ratio is closely related,  as in both cases the values are similar (Norway 1 and 0.89 respectively; Afghanistan 0.19 and 0.19 respectively). Education expectancy and GNI can also be considered and strongly related (Norway 17.5 and 64,992 respectively; Afghanistan 9.3 and 1,885 respectively). Life expectancy and maternal mortality ratio (annual number of maternal deaths/100,000 live births) can also be related, and further be realated to the adolescent births and education experience, life expectancy, as well as education and labour female-male ratio. 
+
+
+
