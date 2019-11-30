@@ -105,5 +105,4 @@ dim(human2_)
 
 #Save the human data in your data folder
 human <- human2_
-
-
+write.csv(human, file= "human.csv")

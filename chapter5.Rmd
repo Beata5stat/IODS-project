@@ -1,6 +1,5 @@
-# *CHAPTER 5* Dimensionality reduction 
-
 #*TEA TIME*
+
 #Load the tea dataset from the package Factominer. Explore the data briefly: look at the structure and the dimensions of the data and visualize it. Then do Multiple Correspondence Analysis on the tea data (or to a certain columns of the data, it’s up to you). Interpret the results of the MCA and draw at least the variable biplot of the analysis. You can also explore other plotting options for MCA. Comment on the output of the plots. (0-4 points)
 
 ```{r}
@@ -12,7 +11,7 @@ data("tea")
 str(tea)
 dim(tea)
 keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
-tea_time <- select(tea, one_of(keep_columns))
+tea_time <- select(tea, keep_columns)
 summary(tea_time)
 str(tea_time)
 gather(tea_time) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
