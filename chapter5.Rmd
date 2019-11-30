@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 #*TEA TIME*
 
 #Load the tea dataset from the package Factominer. Explore the data briefly: look at the structure and the dimensions of the data and visualize it. Then do Multiple Correspondence Analysis on the tea data (or to a certain columns of the data, it’s up to you). Interpret the results of the MCA and draw at least the variable biplot of the analysis. You can also explore other plotting options for MCA. Comment on the output of the plots. (0-4 points)
@@ -30,7 +35,7 @@ plot(mca, invisible=c("ind"), habillage = "quali")
 ```{r}
 plot(mca, invisible=c("var"), habillage = "quali")
 ```
-# The MCA above shows exclusivly the distribution of data concerning individuals, suggesting similarities and dissimilarities among them.
+# The MCA above shows exclusivly the distribution of data concerning individuals, suggesting similarities and dissimilarities among them. They are arranged in clear clusters. 
 
 ```{r}
 library(factoextra)
@@ -39,7 +44,7 @@ res.mca <- MCA(tea_time, graph=FALSE)
 fviz_mca_biplot(res.mca, repel = TRUE, ggtheme = theme_minimal())
 ```
 
-# This overwhelming Biplot shows both, variables and individuals at the same time, highliting relationships among them. Again, the distance measures the similarity and dissimilarity among the variables and individuals.  
+# This extensive plot shows both, variables and individuals at the same time, highliting relationships among them. The distance measures the similarity and dissimilarity among the variables and individuas, that is the possible correlations between them.  
 
 
 
