@@ -55,6 +55,14 @@ dim(RATSL)
 str(RATSL)
 summary(RATSL)
 
+getwd()
+setwd("C:/Users/Omistaja/Documents/IODS-project/data")
+getwd()
+write.csv(BPRS, file = "~/IODS-project/data/BPRS.csv")
+write.csv(BPRSL, file = "~/IODS-project/data/BPRSL.csv")
+write.csv(RATS, file = "~/IODS-project/data/RATS.csv")
+write.csv(RATSL, file = "~/IODS-project/data/RATSL.csv")
+
 #The wide and the long form of data contain the same infromation, but they differ in the way they represent it.  
 #In the examples above, the BPRS data in the wide form has 40 observations and 11 variables, while in the long form, it has 360 observations of 5 variables.   
 #The RATS data in the wide form had 16 observations of 13 variables, while in the long form it contains 176 observations of 5 variables. 

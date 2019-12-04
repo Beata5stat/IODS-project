@@ -1,0 +1,72 @@
+
+#Longitudinal Data
+
+# TASK 1:Implement the analysis of Chapter 8 of MABS using the RATS data. (0-7 points: 0-4 points for graphs or analysis results + 0-3 points for their interpretations)
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+RATS <- read.csv(file = "~/IODS-project/data/RATS.csv", header = TRUE, row.names = 1)
+RATSL <-read.csv(file = "~/IODS-project/data/RATSL.csv", header = TRUE, row.names = 1)
+dim(RATSL)
+RATS$ID <- factor(RATS$ID)
+RATS$Group <- factor(RATS$Group)
+RATSL$ID <- factor(RATSL$ID)
+RATSL$Group <- factor(RATSL$Group)
+glimpse(RATS)
+ggplot(RATSL, aes(x = Time, y = Weight, group = ID)) +
+  geom_line(aes(linetype = Group)) +
+  scale_x_continuous(name = "Time (days)", breaks = seq(0, 60, 10)) +
+  scale_y_continuous(name = "Weight (grams)") +
+  theme(legend.position = "top")
+```
+
+#Tracking. The graph shows that during the period of over 60 days of study, the three groups of rats preserved their weight at more or less the same level, without any dramatic changes. The Group 1, with the lowest weight at the starting point demonstrates the most modest weight fluctuation when compared with other groups, and remain as the one characterized with the lowest weight values. The groups 2 and 3, in turn, show quite a significant weight gain, even up to around 25% of the starting weight. The groups 2 and 3 demonstrate strong tendency towards weight gain, while the group 1 is characterized by almost constant weight. 
+
+
+
+#The Linear model
+
+```{r}
+RATS_reg <- lm(Weight ~ Time + Group, data = RATSL)
+summary(RATS_reg)
+```
+
+#The Random Intercept Model
+
+```{r}
+library(lme4)
+RATS_ref <- lmer(Weight ~ Time + Group + (1 | ID), data = RATSL, REML = FALSE)
+summary(RATS_ref)
+```
+
+#Slippery slopes: Random Intercept and Random Slope Model
+```{r}
+RATS_ref1 <- lmer(Weight ~ Time + Group + (Time | ID), data = RATSL, REML = FALSE)
+summary(RATS_ref1)
+```
+
+#Random Intercept and Random Slope Model with interaction
+
+```{r}
+RATS_ref2 <- lmer(Weight ~ Time * Group + (Time | ID), data = RATSL, REML = FALSE)
+summary(RATS_ref2)
+anova(RATS_ref2, RATS_ref1)
+ggplot(RATSL, aes(x = Time, y = Weight, group = ID)) +
+  geom_line(aes(linetype = Group)) +
+  scale_x_continuous(name = "Time (days)", breaks = seq(0, 60, 20)) +
+  scale_y_continuous(name = "Observed weight (grams)") +
+  theme(legend.position = "top")
+Fitted <- fitted(RATS_ref2)
+RATSL <- RATSL %>%
+  mutate(Fitted)
+ggplot(RATSL, aes(x = Time, y = Fitted, group = ID)) +
+  geom_line(aes(linetype = Group)) +
+  scale_x_continuous(name = "Time (days)", breaks = seq(0, 60, 20)) +
+  scale_y_continuous(name = "Fitted weight (grams)") +
+  theme(legend.position = "top")
+
+```
+
+
