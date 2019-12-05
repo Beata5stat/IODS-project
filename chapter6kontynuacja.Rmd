@@ -95,12 +95,6 @@ glimpse(RATSL8S)
 ```
 
 #The summary measure approach - the way to reveal an outlier, which may bias the conclusions:
-```{r}
-ggplot(RATSL8S, aes(x = Group, y = mean)) +
-  geom_boxplot() +
-  stat_summary(fun.y = "mean", geom = "point", shape=23, size=4, fill = "pink") +
-  scale_y_continuous(name = "mean(Weight), weeks 1-8")
-```
 
 # Filtering the outlier & drawing the plot:
 ```{r}
@@ -112,6 +106,21 @@ ggplot(RATSL8S, aes(x = Group, y = mean)) +
   scale_y_continuous(name = "mean(Weight), weeks 1-8")
 ```
 
+#Boxplot
+```{r}
+library(ggplot2)
+RATSL <-read.csv(file = "~/IODS-project/data/RATSL.csv", header = TRUE, row.names = 1)
+g1 <- ggplot(RATSL, aes(x = WD, y = Weight, col = ID))
+g1 + geom_boxplot() + ylab("ID")
+g2 <- ggplot(RATSL, aes(x = WD, y = Weight, col = ID))
+g2 + geom_boxplot() + ggtitle("Boxplot - Rats") 
+```
+
+
+
 #T-test is performed using: t.test(mean ~ Group, data = RATSL8S1, var.equal = TRUE) 
 
 #Anova: RATSL8S2 <- RATSL8S %>%, mutate(baseline = RATS$week0), fit <- lm(mean ~ baseline + Group, data = RATSL8S2), anova(fit)
+
+
+# The tests above are considered to be potentially useful in the initial exploration of the longitudinal data (more then than at the later stage of the study). Their use may lead to discovery of interesting patterns within the data, as well as may reveal the presence of an outlier (see: Chapter 8, MABS4IODS). 
