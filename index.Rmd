@@ -47,3 +47,9 @@ output:
 ```{r child = "chapter6.Rmd"}
 
 ```
+***
+
+```{r child = "chapter6kontynuacja.Rmd"}
+
+```
+***
