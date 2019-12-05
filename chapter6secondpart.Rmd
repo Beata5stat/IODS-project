@@ -1,0 +1,152 @@
+# Longitudinal Data # TASK 2
+
+#Read the data
+```{r}
+BPRS <- read.csv(file = "~/IODS-project/data/BPRS.csv", header = TRUE, row.names = 1)
+BPRSL <- read.csv(file = "~/IODS-project/data/BPRSL.csv", header = TRUE, row.names = 1)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+#Factor variables & glimpse
+```{r}
+BPRS$treatment <- factor(BPRS$treatment)
+BPRS$subject <- factor(BPRS$subject)
+glimpse(BPRS)
+```
+
+```{r}
+BPRSL <-  BPRS %>% gather(key = weeks, value = bprs, -treatment, -subject)
+BPRSL <-  BPRSL %>% mutate(week = as.integer(substr(weeks,5,5)))
+glimpse(BPRSL)
+
+```
+
+
+#Linear mixed effects models 
+
+```{r}
+dim(BPRSL)
+```
+
+#Standardizing the data
+
+```{r}
+BPRSL <- BPRSL %>%
+  group_by(week) %>%
+  mutate(stdbprs = (bprs - mean(bprs))/sd(bprs) ) %>%
+  ungroup()
+```
+
+#Plot
+```{r}
+ggplot(BPRSL, aes(x = week, y = bprs, linetype = subject)) +
+  geom_line() +
+  scale_linetype_manual(values = rep(1:10, times=4)) +
+  facet_grid(. ~ treatment, labeller = label_both) +
+  theme(legend.position = "none") + 
+  scale_y_continuous(limits = c(min(BPRSL$bprs), max(BPRSL$bprs)))
+```
+
+#Plot
+```{r}
+ggplot(BPRSL, aes(x = week, y = bprs, group = subject)) +
+  geom_line(aes(linetype = subject)) +
+  scale_x_continuous(name = "Week", breaks = seq(0, 60, 10)) +
+  scale_y_continuous(name = "bprs") +
+  theme(legend.position = "top")
+
+```
+
+
+```{r}
+ggplot(BPRSL, aes(x = week, y = bprs, linetype = subject)) +
+  geom_line() +
+  scale_linetype_manual(values = rep(1:10, times=4)) +
+  facet_grid(. ~treatment, labeller = label_both) +
+  theme(legend.position = "none") + 
+  scale_y_continuous(limits = c(min(BPRSL$bprs), max(BPRSL$bprs)))
+```
+
+#Multiple linear regression model
+```{r}
+BPRS_reg <- lm(bprs ~ week + treatment, data = BPRSL)
+summary(BPRS_reg)
+```
+
+#The Random Intercept Model
+
+```{r}
+library(lme4)
+BPRS_ref <- lmer(bprs ~ week + treatment + (1 | subject), data = BPRSL, REML = FALSE)
+summary(BPRS_ref)
+```
+
+#Slippery slopes: Random Intercept and Random Slope Model
+```{r}
+BPRS_ref1 <- lmer(bprs ~ week + treatment + (week | subject), data = BPRSL, REML = FALSE)
+summary(BPRS_ref1)
+```
+
+
+#Anova
+```{r}
+anova(BPRS_ref1, BPRS_ref)
+```
+
+
+#Random Intercept and Random Slope Model with interaction
+
+```{r}
+BPRS_ref2 <- lmer(bprs ~ week * treatment + (week | subject), data = BPRSL, REML = FALSE)
+```
+
+#Print summary
+
+```{r}
+summary(BPRS_ref2)
+```
+
+# perform an ANOVA test on the two models
+
+```{r}
+anova(BPRS_ref2, BPRS_ref1)
+```
+
+#Draw the plot
+```{r}
+library(ggplot2)
+library(dplyr) 
+library(tidyr)
+library(lme4)
+ggplot(BPRSL, aes(x = week, y = bprs, group = treatment)) +
+  geom_line(aes(linetype = treatment)) +
+  scale_x_continuous(name = "week", breaks = seq(0, 60, 20)) +
+  scale_y_continuous(name = "bprs") +
+  theme(legend.position = "top")
+```
+
+# Create a vector of the fitted values
+```{r}
+Fitted <- fitted(BPRS_ref2)
+```
+# Create a new column fitted to BPRSL
+
+```{r}
+BPRSL <- BPRSL %>%
+  mutate(Fitted)
+```
+
+#Draw plot
+```{r}
+ggplot(BPRSL, aes(x = week, y = Fitted, group = treatment)) +
+  geom_line(aes(linetype = treatment)) +
+  scale_x_continuous(name = "Week", breaks = seq(0, 60, 20)) +
+  scale_y_continuous(name = "Bprs") +
+  theme(legend.position = "top")
+
+```
+
+
+
